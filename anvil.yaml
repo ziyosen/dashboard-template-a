@@ -16,6 +16,11 @@ db_schema:
       type: datetime
     server: full
     title: Files
+  table_3:
+    client: none
+    columns: []
+    server: full
+    title: Table 3
   users:
     client: none
     columns:
@@ -46,10 +51,16 @@ db_schema:
     server: full
     title: Users
 dependencies: []
-name: Dashboard Template A
+metadata: {description: Gabutan, logo_img: 'asset:1000011390.jpg', title: Ulet tangga}
+name: ulet tangga
 native_deps: {head_html: '<link href="https://fonts.googleapis.com/css2?family=Eczar:wght@400;600&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" rel="preload" as="font" crossorigin="anonymous">'}
-package_name: Dashboard_Template_A
-runtime_options: {client_version: '3', preview_v3: true, server_spec: null, server_version: python3-sandbox, version: 2}
+package_name: ulet_tangga
+runtime_options:
+  client_version: '3'
+  preview_v3: true
+  server_spec: {base: python310-standard}
+  server_version: python3-sandbox
+  version: 2
 services:
 - client_config: {}
   server_config: {}
