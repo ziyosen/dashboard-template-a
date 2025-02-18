@@ -1,57 +1,60 @@
-from ._anvil_designer import FrameTemplate
-from anvil import *
-import anvil.server
-import anvil.users
-import anvil.tables as tables
-import anvil.tables.query as q
-from anvil.tables import app_tables
-from ..Reports import Reports
-from ..Sales import Sales
+import random
 
-#This is your startup form. It has a sidebar with navigation links and a content panel where page content will be added.
-class Frame(FrameTemplate):
-  def __init__(self, **properties):
-    # Set Form properties and Data Bindings.
-    self.init_components(**properties)
-    #Present users with a login form with just one line of code:
-    #anvil.users.login_with_form()
+# Fungsi untuk menggulung dadu
+def roll_dice():
+    return random.randint(1, 6)
 
-    #Set the Plotly plots template to match the theme of the app
-    Plot.templates.default = "rally"
-    #When the app starts up, the Sales form will be added to the page
-    self.content_panel.add_component(Sales())
-    #Change the color of the sales_page_link to indicate that the Sales page has been selected
-    self.sales_page_link.background = app.theme_colors['Primary Container']
-    
+# Fungsi untuk menjalankan permainan
+def play_game():
+    print("Selamat datang di permainan Ular Tangga!")
+    print("Developer: Ziyosen")
 
-  def sales_page_link_click(self, **event_args):
-    """This method is called when the link is clicked"""
-    #Clear the content panel and add the Sales Form
-    self.content_panel.clear()
-    self.content_panel.add_component(Sales())
-    #Change the color of the sales_page_link to indicate that the Sales page has been selected
-    self.sales_page_link.background = app.theme_colors['Primary Container']
-    self.reports_page_link.background = "transparent"
+    # Papan permainan
+    snakes = {16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75}
+    ladders = {1: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100}
 
-  def reports_page_link_click(self, **event_args):
-    """This method is called when the link is clicked"""
-    #Clear the content panel and add the Reports Form
-    self.content_panel.clear()
-    self.content_panel.add_component(Reports())
-    #Change the color of the sales_page_link to indicate that the Reports page has been selected
-    self.reports_page_link.background = app.theme_colors['Primary Container']
-    self.sales_page_link.background = "transparent"
+    # Input jumlah pemain
+    num_players = int(input("Masukkan jumlah pemain (1-6): "))
+    if num_players < 1 or num_players > 6:
+        print("Jumlah pemain harus antara 1 dan 6.")
+        return
 
-  #If using the Users service, uncomment this code to log out the user:
-  # def signout_link_click(self, **event_args):
-  #   """This method is called when the link is clicked"""
-  #   anvil.users.logout()
-  #   open_form('Logout')
+    player_positions = [0] * num_players  # Posisi pemain
+    player_names = [f"Pemain {i+1}" for i in range(num_players)]
+    winner = None
 
+    while winner is None:
+        for i in range(num_players):
+            input(f"{player_names[i]}, tekan Enter untuk menggulung dadu...")
+            dice_value = roll_dice()
+            print(f"{player_names[i]} menggulung dadu dan mendapatkan: {dice_value}")
 
+            # Update posisi pemain
+            player_positions[i] += dice_value
+            
+            # Cek jika pemain melampaui 100
+            if player_positions[i] > 100:
+                player_positions[i] = 100
+            
+            # Cek ular
+            if player_positions[i] in snakes:
+                print(f"Oh tidak! {player_names[i]} terkena ular! Turun ke {snakes[player_positions[i]]}")
+                player_positions[i] = snakes[player_positions[i]]
+            
+            # Cek tangga
+            if player_positions[i] in ladders:
+                print(f"Bagus! {player_names[i]} naik tangga ke {ladders[player_positions[i]]}")
+                player_positions[i] = ladders[player_positions[i]]
+                
+            print(f"{player_names[i]} sekarang berada di posisi {player_positions[i]}")
 
+            # Cek pemenang
+            if player_positions[i] == 100:
+                winner = player_names[i]
+                break
 
+    print(f"Selamat {winner}, Anda menang!")
 
-
-
-
+# Menjalankan permainan
+if __name__ == "__main__":
+    play_game()
